@@ -2,34 +2,48 @@
 import { type RouterFactory, type ProcBuilder, type BaseConfig, db } from ".";
 import * as _Schema from '@zenstackhq/runtime/zod/input';
 const $Schema: typeof _Schema = (_Schema as any).default ?? _Schema;
+import { z } from 'zod';
 import { checkRead, checkMutate } from '../helper';
 import type { Prisma } from '@zenstackhq/runtime/models';
 import type { UseTRPCMutationOptions, UseTRPCMutationResult, UseTRPCQueryOptions, UseTRPCQueryResult, UseTRPCInfiniteQueryOptions, UseTRPCInfiniteQueryResult } from '@trpc/react-query/shared';
 import type { TRPCClientErrorLike } from '@trpc/client';
 import type { AnyRouter } from '@trpc/server';
 
+const InputSchema = $Schema.OrganizationRoleInputSchema ?? {
+    createMany: z.any(),
+    create: z.any(),
+    deleteMany: z.any(),
+    delete: z.any(),
+    findFirst: z.any(),
+    findMany: z.any(),
+    findUnique: z.any(),
+    updateMany: z.any(),
+    update: z.any(),
+    count: z.any(),
+};
+
 export default function createRouter<Config extends BaseConfig>(router: RouterFactory<Config>, procedure: ProcBuilder<Config>) {
     return router({
 
-        createMany: procedure.input($Schema.OrganizationRoleInputSchema.createMany.optional()).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.createMany(input as any))),
+        createMany: procedure.input(InputSchema.createMany.optional()).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.createMany(input as any))),
 
-        create: procedure.input($Schema.OrganizationRoleInputSchema.create).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.create(input as any))),
+        create: procedure.input(InputSchema.create).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.create(input as any))),
 
-        deleteMany: procedure.input($Schema.OrganizationRoleInputSchema.deleteMany.optional()).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.deleteMany(input as any))),
+        deleteMany: procedure.input(InputSchema.deleteMany.optional()).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.deleteMany(input as any))),
 
-        delete: procedure.input($Schema.OrganizationRoleInputSchema.delete).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.delete(input as any))),
+        delete: procedure.input(InputSchema.delete).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.delete(input as any))),
 
-        findFirst: procedure.input($Schema.OrganizationRoleInputSchema.findFirst.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findFirst(input as any))),
+        findFirst: procedure.input(InputSchema.findFirst.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findFirst(input as any))),
 
-        findMany: procedure.input($Schema.OrganizationRoleInputSchema.findMany.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findMany(input as any))),
+        findMany: procedure.input(InputSchema.findMany.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findMany(input as any))),
 
-        findUnique: procedure.input($Schema.OrganizationRoleInputSchema.findUnique).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findUnique(input as any))),
+        findUnique: procedure.input(InputSchema.findUnique).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.findUnique(input as any))),
 
-        updateMany: procedure.input($Schema.OrganizationRoleInputSchema.updateMany).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.updateMany(input as any))),
+        updateMany: procedure.input(InputSchema.updateMany).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.updateMany(input as any))),
 
-        update: procedure.input($Schema.OrganizationRoleInputSchema.update).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.update(input as any))),
+        update: procedure.input(InputSchema.update).mutation(async ({ ctx, input }) => checkMutate(db(ctx).organizationRole.update(input as any))),
 
-        count: procedure.input($Schema.OrganizationRoleInputSchema.count.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.count(input as any))),
+        count: procedure.input(InputSchema.count.optional()).query(({ ctx, input }) => checkRead(db(ctx).organizationRole.count(input as any))),
 
     }
     );
